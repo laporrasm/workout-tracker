@@ -1,6 +1,13 @@
 <template>
   <label :for="id" class="checkbox">
-    <input class="checkbox__input" type="checkbox" :name="groupName" :id="id">
+    <input
+      type="checkbox"
+      :name="groupName"
+      :id="id"
+      :value="id"
+      class="checkbox__input"
+      @input="onChange"
+    >
     <div class="checkbox__box"></div>
     {{ label }}
   </label>
@@ -10,6 +17,7 @@
 export default {
   name: 'Checkbox',
   props: {
+    value: Array,
     id: {
       type: String,
       required: true,
@@ -18,7 +26,18 @@ export default {
       type: String,
       required: true,
     },
-    groupName: String,
+    groupName: {
+      type: String,
+      required: true,
+    },
+  },
+  methods: {
+    onChange(e) {
+      let currentValue = [...this.value];
+      if (e.target.checked) currentValue.push(e.target.value);
+      else currentValue = currentValue.filter((item) => item !== e.target.value);
+      this.$emit('input', currentValue);
+    },
   },
 };
 </script>
@@ -27,7 +46,6 @@ export default {
 .checkbox {
   display: inline-flex;
   align-items: center;
-  margin: 1em 1em 0 0;
   text-transform: capitalize;
   cursor: pointer;
 

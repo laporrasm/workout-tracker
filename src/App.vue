@@ -73,7 +73,6 @@ button {
 }
 
 section {
-  padding: 2em;
-  padding-bottom: calc(66.33px + 2em);
+  padding: 3em 2em 5em;
 }
 </style>

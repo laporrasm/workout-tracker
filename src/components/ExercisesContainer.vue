@@ -3,9 +3,9 @@
       <h2>My Exercises</h2>
       <exercise-card
         v-for="exercise in exercises"
-        :key="exercise.name"
-        :name="exercise.name"
-        :type="exercise.type"
+        :key="exercise.exerciseName"
+        :name="exercise.exerciseName"
+        :type="exercise.exerciseType"
         :muscleGroups="exercise.muscleGroups"
       />
     </div>

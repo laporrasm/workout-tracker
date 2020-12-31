@@ -1,16 +1,19 @@
 {
     "exercises": [
         {
+            "id": 1,
             "exerciseName": "Pull Up",
             "exerciseType": "isotonic",
             "muscleGroups": ["back", "biceps", "forearm"]
         },
         {
+            "id": 2,
             "exerciseName": "Squat",
             "exerciseType": "isotonic",
             "muscleGroups": ["hamstring", "glutes", "quadriceps"]
         },
         {
+            "id": 3,
             "exerciseName": "Push Up",
             "exerciseType": "isotonic",
             "muscleGroups": ["chest", "shoulders", "triceps"]

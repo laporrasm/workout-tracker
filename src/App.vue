@@ -6,10 +6,17 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import Nav from './components/Nav.vue';
 
 export default {
   components: { Nav },
+  methods: {
+    ...mapActions([
+      'setExercises',
+    ]),
+  },
+  mounted() { this.setExercises(); },
 };
 </script>
 
@@ -44,6 +51,7 @@ h1 {
 }
 
 h2 {
+  margin-top: 0;
   font-size: 2rem;
 }
 

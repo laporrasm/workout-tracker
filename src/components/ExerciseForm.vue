@@ -88,7 +88,7 @@ export default {
         (formValueEntry) => formValueEntry[1].length,
       );
       if (formFieldsValid) {
-        this.$store.commit('addExercise', this.formValues);
+        this.$store.dispatch('addExercise', this.formValues);
         this.$router.push('./');
       } else alert('There is missing values.');
     },
@@ -102,6 +102,4 @@ export default {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 1em;
 }
-
-h2 { margin-top: 0; }
 </style>

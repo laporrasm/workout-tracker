@@ -1,5 +1,7 @@
 <template>
     <div v-if="exercises.length" class="exercises-container">
+      <div class="filter-buttons">
+      </div>
       <h2>My Exercises</h2>
       <exercise-card
         v-for="exercise in exercises"
@@ -8,6 +10,7 @@
         :type="exercise.exerciseType"
         :muscleGroups="exercise.muscleGroups"
       />
+      <Button btnType="internalLink" link="/exercises/add">+ New Exercise</Button>
     </div>
     <empty-screen
       v-else
@@ -19,6 +22,7 @@
 </template>
 
 <script>
+import Button from './Button.vue';
 import EmptyScreen from './EmptyScreen.vue';
 import ExerciseCard from './ExerciseCard.vue';
 
@@ -27,6 +31,7 @@ export default {
   components: {
     EmptyScreen,
     ExerciseCard,
+    Button,
   },
   computed: {
     exercises() { return this.$store.state.exercises; },

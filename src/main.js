@@ -1,6 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faUser, faDumbbell, faStopwatch, faCalendarAlt, faSignOutAlt,
+  faUser, faDumbbell, faStopwatch, faCalendarAlt, faSignOutAlt, faRedoAlt, faPause, faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -9,7 +9,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-library.add(faUser, faDumbbell, faStopwatch, faCalendarAlt, faSignOutAlt);
+library.add(faUser, faDumbbell, faStopwatch, faCalendarAlt,
+  faSignOutAlt, faRedoAlt, faPause, faPlay);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

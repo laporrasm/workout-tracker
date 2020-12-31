@@ -6,8 +6,14 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/workouts',
-    name: 'Workouts',
+    // name: 'Workouts',
     component: () => import('../views/Workouts.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('../components/Timer.vue'),
+      },
+    ],
   },
   {
     path: '/exercises',

@@ -4,7 +4,7 @@
 
     <ul class="nav__list">
       <li class="nav__item">
-        <router-link to="/workout" class="nav__link" active-class="nav__link--active">
+        <router-link to="/workouts" class="nav__link" active-class="nav__link--active">
           <font-awesome-icon :icon="['fas', 'stopwatch']" size="lg"/>
           <span>Workouts</span>
         </router-link>

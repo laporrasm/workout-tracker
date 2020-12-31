@@ -67,6 +67,7 @@ export default {
       background-color: inherit;
       border: none;
       border-bottom: 2px solid var(--color-lightgray);
+      border-radius: 0;
       outline: none;
       resize: vertical;
 

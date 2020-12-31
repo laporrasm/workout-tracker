@@ -1,14 +1,14 @@
 <template>
   <div class="form-container">
     <h2>Create a New Exercise</h2>
-    <form action="#">
+    <form action="#" @submit.prevent="addExercise()">
       <h4>What should we call it?</h4>
       <Input
         inputType="text"
         :required="true"
         inputName="name"
         placeholder="Add a name"
-        v-model="values.name"
+        v-model="formValues.exerciseName"
       />
 
       <h4>How do you perform it?</h4>
@@ -16,25 +16,28 @@
         id="isometric"
         label="Isometric (Hold for a given amount of time)"
         groupName="exercise-type"
-        v-model="values.type"
+        v-model="formValues.exerciseType"
       />
       <radio-button
         id="isotonic"
         label="Isotonic (Perform for a given amount of reps)"
         groupName="exercise-type"
-        v-model="values.type"
+        v-model="formValues.exerciseType"
       />
 
-      <h4>What muscle groups does it target?</h4>
-      <checkbox
-        v-for="muscle in muscleGroups"
-        :key="muscle"
-        :id="muscle"
-        :label="muscle"
-        groupName="exercise-group"
-      />
+      <h4>What muscle groups does it work?</h4>
+      <div class="checkbox-container">
+        <checkbox
+          v-for="muscle in muscleGroups"
+          :key="muscle"
+          :id="muscle"
+          :label="muscle"
+          groupName="exercise-group"
+          v-model="formValues.muscleGroups"
+        />
+      </div>
 
-      <Button type="button" @click="addExercise()">Create Exercise</Button>
+      <Button type="button">Create Exercise</Button>
     </form>
   </div>
 </template>
@@ -55,9 +58,9 @@ export default {
   },
   data() {
     return {
-      values: {
-        name: '',
-        type: '',
+      formValues: {
+        exerciseName: '',
+        exerciseType: '',
         muscleGroups: [],
       },
       muscleGroups: [
@@ -80,11 +83,23 @@ export default {
   },
   methods: {
     addExercise() {
+      const formValuesEntries = Object.entries(this.formValues);
+      const formFieldsValid = formValuesEntries.every(
+        (formValueEntry) => formValueEntry[1].length,
+      );
+      if (formFieldsValid) {
+        this.$store.dispatch('addExercise', this.formValues);
+        this.$router.push('./');
+      } else alert('There is missing values.');
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
+.checkbox-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1em;
+}
 </style>

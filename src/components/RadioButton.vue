@@ -47,6 +47,7 @@ export default {
   &__radio {
     width: 1.25em;
     height: 1.25em;
+    flex-shrink: 0;
     margin-right: .5em;
     padding: 2px;
     border: 2px solid var(--color-lightgray);

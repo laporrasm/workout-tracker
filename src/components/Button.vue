@@ -4,7 +4,6 @@
       v-if="btnType == 'internalLink'"
       :to="link"
       class="btn"
-      :class="{ 'btn--inverted' : styleInverted }"
     >
       <slot></slot>
     </router-link>
@@ -13,11 +12,10 @@
       :href="link"
       target="_blank"
       class="btn"
-      :class="{ 'btn--inverted' : styleInverted }"
     >
       <slot></slot>
     </a>
-    <button v-else class="btn" :class="{ 'btn--inverted' : styleInverted }">
+    <button v-else class="btn">
       <slot></slot>
     </button>
   </div>
@@ -34,10 +32,6 @@ export default {
     link: {
       default: '/',
       type: String,
-    },
-    styleInverted: {
-      default: false,
-      type: Boolean,
     },
   },
 };

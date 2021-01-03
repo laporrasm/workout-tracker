@@ -14,15 +14,17 @@
         </svg>
       </div>
 
-      <div class="timer__time">{{formatTime(timeLeft)}}</div>
+      <div class="timer__time">
+        {{(!countDownFinished && !paused) ? countDown : formatTime(timeLeft)}}
+      </div>
     </div>
 
     <div class="buttons">
-      <button @click = "paused=!paused" class="buttons__pause">
-        <font-awesome-icon v-if="!paused" :icon="['fas', 'pause']"/>
-        <font-awesome-icon v-if="paused" :icon="['fas', 'play']"/>
+      <button class="buttons__pause">
+        <font-awesome-icon @click = "pause()" v-if="!paused" :icon="['fas', 'pause']"/>
+        <font-awesome-icon @click = "play()" v-if="paused" :icon="['fas', 'play']"/>
       </button>
-      <button @click = "restart()" class="buttons__restart">
+      <button @click = "restartTimer()" class="buttons__restart">
         <font-awesome-icon :icon="['fas', 'redo-alt']"/>
       </button>
     </div>
@@ -30,6 +32,9 @@
 </template>
 
 <script>
+import alarmCountDownMp3 from '../assets/alarmCountDown.mp3';
+import alarmLastCountMp3 from '../assets/alarmLastCount.mp3';
+
 export default {
   name: 'Timer',
   props: {
@@ -38,25 +43,64 @@ export default {
       default: 20,
     },
   },
+
   data() {
     return {
       circleDasharray: 283,
-      timeInterval: null,
+      timeIntervalTimer: null,
+      timeIntervalCount: null,
       timePassed: 0,
       timeLeft: this.timeLimit,
-      paused: false,
+      paused: true,
+      countDown: 3,
+      countDownFinished: false,
+      audioCountDown: new Audio(alarmCountDownMp3),
+      audioLasCount: new Audio(alarmLastCountMp3),
     };
   },
-  mounted() { this.startTimer(); },
 
+  // mounted() { this.startTimer() };
+
+  watch: {
+    timeLeft() {
+      if (this.timeLeft === 0) this.$emit('timerDone');
+    },
+
+    countDownFinished() {
+      if (this.countDownFinished) {
+        if (this.timePassed === 0) this.startTimer();
+      }
+    },
+
+    paused() {
+      if (!this.paused) {
+        this.startCountDown();
+      }
+      if (this.paused) {
+        this.countDown = 3;
+        this.countDownFinished = false;
+      }
+    },
+  },
   methods: {
+    pause() {
+      if (this.countDownFinished) this.paused = true;
+    },
+
+    play() {
+      this.paused = false;
+    },
+
     startTimer() {
-      this.timerInterval = setInterval(() => {
-        if (!this.paused) {
+      this.timeIntervalTimer = setInterval(() => {
+        if (this.countDownFinished) {
           this.timePassed += 1;
           this.timeLeft = this.timeLimit - this.timePassed;
           this.setCircleDasharray();
-          if (this.timeLeft === 0) clearInterval(this.timerInterval);
+          if (this.timeLeft === 0) {
+            this.audioLasCount.play();
+            clearInterval(this.timeIntervalTimer);
+          } else if (this.timeLeft < 4) this.audioCountDown.play();
         }
       }, 1000);
     },
@@ -79,12 +123,23 @@ export default {
       this.circleDasharray = `${val > 0 ? val : 0} 283`;
     },
 
-    restart() {
+    restartTimer() {
+      clearInterval(this.timeIntervalTimer);
       this.circleDasharray = 283;
-      clearInterval(this.timerInterval);
+      this.paused = true;
       this.timePassed = 0;
       this.timeLeft = this.timeLimit;
-      this.startTimer();
+      clearInterval(this.timeIntervalCount);
+    },
+
+    startCountDown() {
+      this.timeIntervalCount = setInterval(() => {
+        this.countDown -= 1;
+        if (this.countDown === 0) {
+          clearInterval(this.timeIntervalCount);
+          this.countDownFinished = true;
+        }
+      }, 1000);
     },
   },
 };

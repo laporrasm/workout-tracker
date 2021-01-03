@@ -27,6 +27,10 @@ const routes = [
         path: 'add',
         component: () => import('../components/ExerciseForm.vue'),
       },
+      {
+        path: 'edit/:id',
+        component: () => import('../components/ExerciseForm.vue'),
+      },
     ],
   },
   {

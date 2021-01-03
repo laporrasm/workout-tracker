@@ -28,12 +28,12 @@
       <h4>What muscle groups does it work?</h4>
       <div class="checkbox-container">
         <checkbox
-          v-for="muscle in muscleGroups"
-          :key="muscle"
-          :id="muscle"
-          :label="muscle"
-          groupName="exercise-group"
+          v-for="(option, index) in muscleGroups"
           v-model="formValues.muscleGroups"
+          :key="index"
+          :index="index"
+          :label="option.label"
+          :input-value="option.value"
         />
       </div>
 
@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import Button from './Button.vue';
 import Checkbox from './Checkbox.vue';
 import Input from './Input.vue';
@@ -64,22 +66,69 @@ export default {
         muscleGroups: [],
       },
       muscleGroups: [
-        'back',
-        'biceps',
-        'calves',
-        'chest',
-        'core',
-        'forearm',
-        'glutes',
-        'hamstring',
-        'latissimus',
-        'neck',
-        'quadriceps',
-        'shoulders',
-        'trapezius',
-        'triceps',
+        {
+          label: 'Back',
+          value: 'back',
+        },
+        {
+          label: 'Biceps',
+          value: 'biceps',
+        },
+        {
+          label: 'Calves',
+          value: 'calves',
+        },
+        {
+          label: 'Chest',
+          value: 'chest',
+        },
+        {
+          label: 'Core',
+          value: 'core',
+        },
+        {
+          label: 'Forearms',
+          value: 'forearms',
+        },
+        {
+          label: 'Glutes',
+          value: 'glutes',
+        },
+        {
+          label: 'Hamstring',
+          value: 'hamstring',
+        },
+        {
+          label: 'Lattisimus',
+          value: 'lattisimus',
+        },
+        {
+          label: 'Neck',
+          value: 'neck',
+        },
+        {
+          label: 'Quadriceps',
+          value: 'quadriceps',
+        },
+        {
+          label: 'Shoulders',
+          value: 'shoulders',
+        },
+        {
+          label: 'Trapezius',
+          value: 'trapezius',
+        },
+        {
+          label: 'Triceps',
+          value: 'triceps',
+        },
       ],
     };
+  },
+  computed: {
+    ...mapGetters([
+      'getExerciseById',
+    ]),
   },
   methods: {
     addExercise() {
@@ -89,9 +138,21 @@ export default {
       );
       if (formFieldsValid) {
         this.$store.dispatch('addExercise', this.formValues);
-        this.$router.push('./');
       } else alert('There is missing values.');
     },
+  },
+  mounted() {
+    if (this.$route.params.id) {
+      const { id } = this.$route.params;
+      console.log(id);
+      const exercise = this.getExerciseById(id);
+      console.log(exercise);
+      this.formValues = {
+        exerciseName: exercise.exerciseName,
+        exerciseType: exercise.exerciseType,
+        muscleGroups: exercise.muscleGroups,
+      };
+    }
   },
 };
 </script>

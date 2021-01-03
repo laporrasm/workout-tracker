@@ -1,12 +1,12 @@
 <template>
-  <label :for="id" class="checkbox">
+  <label :for="index" class="checkbox">
     <input
+      :id="index"
       type="checkbox"
-      :name="groupName"
-      :id="id"
-      :value="id"
+      :value="inputValue"
+      @change="onChange"
       class="checkbox__input"
-      @input="onChange"
+      :checked="isChecked"
     >
     <div class="checkbox__box"></div>
     {{ label }}
@@ -18,18 +18,23 @@ export default {
   name: 'Checkbox',
   props: {
     value: Array,
-    id: {
-      type: String,
+    index: {
+      type: Number,
       required: true,
     },
     label: {
       type: String,
       required: true,
     },
-    groupName: {
+    inputValue: {
       type: String,
       required: true,
     },
+  },
+  data() {
+    return {
+      isChecked: false,
+    };
   },
   methods: {
     onChange(e) {
@@ -38,6 +43,14 @@ export default {
       else currentValue = currentValue.filter((item) => item !== e.target.value);
       this.$emit('input', currentValue);
     },
+  },
+  created() {
+    console.log(this.value);
+    console.log(this.inputValue);
+    console.log(this.value.find((option) => option === this.inputValue));
+    if (this.value.find((option) => option === this.value)) {
+      this.isChecked = true;
+    }
   },
 };
 </script>

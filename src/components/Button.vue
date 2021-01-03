@@ -4,6 +4,7 @@
       v-if="btnType == 'internalLink'"
       :to="link"
       class="btn"
+      :class="classObject"
     >
       <slot></slot>
     </router-link>
@@ -12,10 +13,16 @@
       :href="link"
       target="_blank"
       class="btn"
+      :class="classObject"
     >
       <slot></slot>
     </a>
-    <button v-else class="btn">
+    <button
+      v-else
+      @click="$emit('clicked')"
+      class="btn"
+      :class="classObject"
+    >
       <slot></slot>
     </button>
   </div>
@@ -33,6 +40,19 @@ export default {
       default: '/',
       type: String,
     },
+    emphasis: {
+      default: 'high',
+      type: String,
+    },
+  },
+  computed: {
+    classObject() {
+      return {
+        'btn--low': this.emphasis === 'low',
+        'btn--medium': this.emphasis === 'medium',
+        'btn--high': this.emphasis === 'high',
+      };
+    },
   },
 };
 </script>
@@ -42,13 +62,26 @@ export default {
   padding: 1em 2em;
   color: var(--color-white);
   font-size: .8125rem;
-  font-weight: 700;
   text-align: center;
   text-transform: uppercase;
-  background-color: var(--color-primary);
-  border: 2px solid var(--color-primary);
-  border-radius: 25px;
+  border-radius: 5px;
   transition: all 500ms ease;
+
+  &--low {
+    color: var(--color-primary);
+    background-color: transparent;
+    border: none;
+  }
+
+  &--medium {
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  &--high {
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
 
   &:hover, &:active {
     color: var(--color-primary);

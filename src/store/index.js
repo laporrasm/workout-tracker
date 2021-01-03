@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import * as fb from '../firebase';
+import router from '../router';
 
 Vue.use(Vuex);
 
@@ -8,6 +10,9 @@ export default new Vuex.Store({
     exercises: [],
     workouts: [],
   },
+  getters: {
+    getExerciseById: (state) => (id) => state.exercises.find((exercise) => exercise.id === id),
+  },
   mutations: {
     addExercise(state, payload) {
       state.exercises.push(payload);
@@ -15,23 +20,37 @@ export default new Vuex.Store({
     setExercises(state, payload) {
       state.exercises = payload;
     },
+    deleteExercise(state, payload) {
+      state.exercises = state.exercises.filter((exerciseObject) => exerciseObject.id !== payload);
+    },
   },
   actions: {
-    setExercises(context) {
-      fetch('https://my-json-server.typicode.com/laporrasm/workout-tracker/exercises')
-        .then((res) => res.json())
-        .then((exercises) => context.commit('setExercises', exercises));
+    setExercises({ commit }) {
+      fb.exercisesCollection.get().then((querySnapshot) => {
+        const exercisesArray = [];
+        querySnapshot.forEach((doc) => {
+          exercisesArray.push({ id: doc.id, ...doc.data() });
+        });
+        commit('setExercises', exercisesArray);
+      });
     },
-    addExercise(context, payload) {
-      fetch('https://my-json-server.typicode.com/laporrasm/workout-tracker/exercises', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-      })
-        .then((res) => res.json())
-        .then(() => context.commit('addExercise', payload));
+    addExercise(context, exerciseObject) {
+      fb.exercisesCollection.add(exerciseObject)
+        .then((docRef) => {
+          console.log('Document: ', docRef);
+          context.commit('addExercise', exerciseObject);
+          router.push('./');
+        });
+    },
+    deleteExercise(context, id) {
+      fb.exercisesCollection.doc(id).delete()
+        .then(() => {
+          console.log('Document successfully deleted!');
+          this.commit('deleteExercise', id);
+        })
+        .catch((e) => {
+          console.error('Error removing document: ', e);
+        });
     },
   },
   modules: {
